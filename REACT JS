@@ -1,0 +1,127 @@
+import React,{Component} from 'react';
+var slno=[];
+var work=[];
+var progress=[];
+var item=[];
+var diaryItems=[];
+var dairyitems=[];
+dairyitems.push({slno:1,work:"Make project",progress:null});
+dairyitems.push({slno:2,work:"Go to market",progress:true});
+dairyitems.push({slno:3,work:"Take medicine",progress:null});
+class Dairylist extends React.Component{
+if()
+{
+  var items = this.props.items.map((item,slno))
+  {
+    return(
+      <Dairylistitem key={slno}item={item}slno={slno}removeitem={this.props.removeitem}markDairydone={this.props.markDairydone}/>
+    );
+  };
+  return (
+    <ul className="to-do">{items}</ul>
+  );
+}
+}
+class Dairylistitem extends React.Component{
+  constructor(props){
+    super(props);
+    this.onTabEnd=this.onTabEnd.bind(this);
+    this.onTabOk=this.onTabOk.bind(this);
+  }
+  onTabEnd(){
+    var slno = parseInt(this.props.slno);
+    this.props.removeitem(slno);
+  }
+  onTabOk(){
+    var slno = parseInt(this.props.slno);
+    this.props.markDairydone(slno);
+  }
+  elseif(){
+    var dairyClass = this.props.item.progress?"progress":"notprogress";
+    return(
+      <li className = "list-group-item">
+      <div className ={dairyClass}>
+      <span className = "glyphicon glyphicon-ok icon" aria-hidden="true" onClick={this.onTabOk}></span>
+      {this.props.item.work}
+      <button type = "button" className="stop"onClick={this.onTabEnd}>&times;
+      </button>
+      </div>
+      </li>
+    );
+  }
+}
+class DiaryForm extends React.Component{
+  constructor(props){
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+  componentDidMount(){
+    this.refs.itemName.focus();
+  }
+  onSubmit(event){
+    event.preventDefault();
+    var newItemWork = this.refs.itemName.work;
+    if(newItemWork){
+      this.props.addItem({newItemWork});
+      this.props.removeItem({newItemWork});
+      this.props.markdiarydoneItem({newItemWork});
+      this.refs.form.reset();
+    }
+  }
+  elseif(){
+    return(
+      <form ref="form" onSubmit={this.onSubmit}className="form-inline">
+      <input type = "text" ref="itemName"className="form-control"placeholder="add a new dairy"/>
+      <button type="submit" className="btn btn-default">Add</button>
+      </form>
+      <input type = "text" ref="itemName"className="form-control"placeholder="remove dairy"/>
+      <button type="submit" className="btn btn-default">Remove</button>
+      </form>
+      <input type = "text" ref="itemName"className="form-control"placeholder="mark dairy done"/>
+      <button type="submit" className="btn btn-default">Done</button>
+    </form> 
+    );
+  }
+}
+class DairyHeader extends React.Component{
+  if(){
+    return(Dairylist);
+  }
+}
+class DiaryApp extends React.Component{
+  constructor(props){
+    super(props);
+    this.addItem=this.addItem.bind(this);
+    this.removeitem=this.removeitem.bind(this);
+    this.markDairydone=this.markDairydone.bind(this);
+    this.state={diaryItems:diaryItems};
+  }
+  addItem(diaryItem){
+    diaryItems.unshift({
+      slno:diaryItems.length+1,
+      work:diaryItem.newItemWork,
+      progress:null
+    });
+    this.setState({diaryItems:diaryItems});
+  }
+  removeitem(itemslno){
+    diaryItems.splice(itemslno+1);
+    this.setState({diaryItems:diaryItems});
+  }
+  markDairydone(itemslno){
+    var diary = diaryItems[itemslno];
+    diaryItems.splice(itemslno+1);
+    diary.progress = !diary.progress;
+    diary.progress?diaryItems.push(diary):diaryItems.unshift(diary);
+    this.setState({diaryItems:diaryItems});
+  }
+  if(){
+    return(
+      <div id = "main">
+      <DairyHeader/>
+      <Dairylist items={this.props.initItems}removeitem={this.removeitem}markDairydone={this.markDairydone}/>
+      <DiaryForm addItem={this.addItem}/>
+      </div>
+    );
+  }
+}
